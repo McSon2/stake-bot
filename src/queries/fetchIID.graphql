@@ -1,0 +1,412 @@
+query ActiveSportBets($limit: Int!, $sort: UserBetsSortEnum, $name: String, $status: [SportBetStatusEnum!], $offset: Int!) {
+  user(name: $name) {
+    id
+    activeSportBets(limit: $limit, sort: $sort, offset: $offset) {
+      ...SportBet
+    }
+    activeSwishBetList(limit: $limit, sort: $sort, status: $status, offset: $offset) {
+      ...SwishBetFragment
+    }
+    activeSportBetCount
+    activeSwishBetCount
+  }
+}
+
+fragment SportBet on SportBet {
+  id
+  customBet
+  amount
+  active
+  currency
+  status
+  payoutMultiplier
+  cashoutMultiplier
+  updatedAt
+  payout
+  createdAt
+  potentialMultiplier
+  adjustments {
+    id
+    payoutMultiplier
+    updatedAt
+    createdAt
+  }
+  promotionBet {
+    settleType
+    status
+    payout
+    currency
+    promotion {
+      name
+    }
+  }
+  user {
+    id
+    name
+  }
+  bet {
+    iid
+  }
+  outcomes {
+    __typename
+    odds
+    status
+    outcome {
+      __typename
+      ...SportMarketOutcome
+    }
+    market {
+      ...SportMarket
+    }
+    fixture {
+      id
+      status
+      slug
+      provider
+      marketCount(status: [active, suspended])
+      extId
+      data {
+        ...SportFixtureDataMatch
+        ...SportFixtureDataOutright
+        __typename
+      }
+      tournament {
+        ...TournamentTreeNested
+      }
+      eventStatus {
+        ...SportOutcomeFixtureEventStatus
+        ...EsportOutcomeFixtureEventStatus
+      }
+      ...SportFixtureLiveStreamExists
+    }
+  }
+}
+
+fragment SportMarketOutcome on SportMarketOutcome {
+  active
+  id
+  odds
+  name
+  customBetAvailable
+  __typename
+}
+
+fragment SportMarket on SportMarket {
+  id
+  name
+  status
+  extId
+  specifiers
+  customBetAvailable
+  provider
+}
+
+fragment SportFixtureDataMatch on SportFixtureDataMatch {
+  startTime
+  competitors {
+    ...SportFixtureCompetitor
+  }
+  teams {
+    name
+    qualifier
+  }
+  tvChannels {
+    language
+    name
+    streamUrl
+  }
+  __typename
+}
+
+fragment SportFixtureCompetitor on SportFixtureCompetitor {
+  name
+  extId
+  countryCode
+  abbreviation
+  iconPath
+}
+
+fragment SportFixtureDataOutright on SportFixtureDataOutright {
+  name
+  startTime
+  endTime
+  __typename
+}
+
+fragment TournamentTreeNested on SportTournament {
+  id
+  name
+  slug
+  category {
+    ...CategoryTreeNested
+  }
+}
+
+fragment CategoryTreeNested on SportCategory {
+  id
+  name
+  slug
+  sport {
+    id
+    name
+    slug
+  }
+}
+
+fragment SportOutcomeFixtureEventStatus on SportFixtureEventStatusData {
+  homeScore
+  awayScore
+  matchStatus
+  clock {
+    matchTime
+    remainingTime
+  }
+  periodScores {
+    homeScore
+    awayScore
+    matchStatus
+  }
+  currentTeamServing
+  homeGameScore
+  awayGameScore
+  statistic {
+    yellowCards {
+      away
+      home
+    }
+    redCards {
+      away
+      home
+    }
+    corners {
+      home
+      away
+    }
+  }
+}
+
+fragment EsportOutcomeFixtureEventStatus on EsportFixtureEventStatus {
+  matchStatus
+  homeScore
+  awayScore
+  scoreboard {
+    homeGold
+    awayGold
+    homeGoals
+    awayGoals
+    homeKills
+    awayKills
+    gameTime
+    homeDestroyedTowers
+    awayDestroyedTurrets
+    currentRound
+    currentCtTeam
+    currentDefTeam
+    time
+    awayWonRounds
+    homeWonRounds
+    remainingGameTime
+  }
+  periodScores {
+    type
+    number
+    awayGoals
+    awayKills
+    awayScore
+    homeGoals
+    homeKills
+    homeScore
+    awayWonRounds
+    homeWonRounds
+    matchStatus
+  }
+  __typename
+}
+
+fragment SportFixtureLiveStreamExists on SportFixture {
+  id
+  betradarStream {
+    exists
+  }
+  imgArenaStream {
+    exists
+  }
+  abiosStream {
+    exists
+    stream {
+      startTime
+      id
+    }
+  }
+  geniussportsStream(deliveryType: hls) {
+    exists
+  }
+}
+
+fragment SwishBetFragment on SwishBet {
+  __typename
+  active
+  amount
+  cashoutMultiplier
+  createdAt
+  currency
+  customBet
+  id
+  odds
+  payout
+  payoutMultiplier
+  updatedAt
+  status
+  user {
+    id
+    name
+    preferenceHideBets
+  }
+  outcomes {
+    __typename
+    id
+    odds
+    lineType
+    outcome {
+      ...SwishMarketOutcomeFragment
+    }
+  }
+}
+
+fragment SwishMarketOutcomeFragment on SwishMarketOutcome {
+  __typename
+  id
+  line
+  over
+  under
+  gradeOver
+  gradeUnder
+  suspended
+  balanced
+  name
+  competitor {
+    id
+    name
+  }
+  market {
+    id
+    stat {
+      name
+      value
+    }
+    game {
+      id
+      fixture {
+        id
+        name
+        slug
+        status
+        swishGame {
+          swishSportId
+        }
+        eventStatus {
+          ...SportFixtureEventStatus
+          ...EsportFixtureEventStatus
+        }
+        data {
+          ... on SportFixtureDataMatch {
+            __typename
+            startTime
+            competitors {
+              name
+              extId
+              countryCode
+              abbreviation
+            }
+          }
+        }
+        tournament {
+          id
+          slug
+          name
+          category {
+            id
+            slug
+            name
+            sport {
+              id
+              name
+              slug
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+fragment SportFixtureEventStatus on SportFixtureEventStatusData {
+  __typename
+  homeScore
+  awayScore
+  matchStatus
+  clock {
+    matchTime
+    remainingTime
+  }
+  periodScores {
+    homeScore
+    awayScore
+    matchStatus
+  }
+  currentTeamServing
+  homeGameScore
+  awayGameScore
+  statistic {
+    yellowCards {
+      away
+      home
+    }
+    redCards {
+      away
+      home
+    }
+    corners {
+      home
+      away
+    }
+  }
+}
+
+fragment EsportFixtureEventStatus on EsportFixtureEventStatus {
+  matchStatus
+  homeScore
+  awayScore
+  scoreboard {
+    homeGold
+    awayGold
+    homeGoals
+    awayGoals
+    homeKills
+    awayKills
+    gameTime
+    homeDestroyedTowers
+    awayDestroyedTurrets
+    currentRound
+    currentCtTeam
+    currentDefTeam
+    time
+    awayWonRounds
+    homeWonRounds
+    remainingGameTime
+  }
+  periodScores {
+    type
+    number
+    awayGoals
+    awayKills
+    awayScore
+    homeGoals
+    homeKills
+    homeScore
+    awayWonRounds
+    homeWonRounds
+    matchStatus
+  }
+  __typename
+}

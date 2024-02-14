@@ -1,0 +1,46 @@
+mutation CustomSportBetMutation($amount: Float!, $currency: CurrencyEnum!, $outcomeIds: [String!]!, $oddsChange: SportOddsChangeEnum!, $identifier: String) {
+  customSportBet(
+    amount: $amount
+    currency: $currency
+    outcomeIds: $outcomeIds
+    oddsChange: $oddsChange
+    identifier: $identifier
+  ) {
+    id
+    amount
+    currency
+    payoutMultiplier
+    outcomes {
+      odds
+      outcome {
+        ...SportMarketOutcome
+        market {
+          ...SportMarket
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment SportMarketOutcome on SportMarketOutcome {
+  active
+  id
+  odds
+  name
+  customBetAvailable
+  __typename
+}
+
+fragment SportMarket on SportMarket {
+  id
+  name
+  status
+  extId
+  specifiers
+  customBetAvailable
+  provider
+}

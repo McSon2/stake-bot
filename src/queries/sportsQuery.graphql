@@ -1,0 +1,16 @@
+query AllSportBets($limit: Int! = 10) {
+  allSportBets(limit: $limit) {
+    iid
+    bet {
+      ... on SportBet {
+        createdAt
+        potentialMultiplier
+        amount
+        currency
+        user {
+          name
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,685 @@
+query BetLookup($iid: String, $betId: String) {
+  bet(iid: $iid, betId: $betId) {
+    ...BetFragment
+    __typename
+  }
+}
+
+fragment BetFragment on Bet {
+  id
+  iid
+  type
+  scope
+  game {
+    name
+    icon
+    slug
+    __typename
+  }
+  bet {
+    ... on CasinoBet {
+      ...CasinoBet
+      user {
+        id
+        name
+        preferenceHideBets
+        __typename
+      }
+      __typename
+    }
+    ... on EvolutionBet {
+      ...EvolutionBet
+      user {
+        id
+        name
+        preferenceHideBets
+        __typename
+      }
+      __typename
+    }
+    ... on MultiplayerCrashBet {
+      ...MultiplayerCrashBet
+      user {
+        id
+        name
+        preferenceHideBets
+        __typename
+      }
+      __typename
+    }
+    ... on MultiplayerSlideBet {
+      ...MultiplayerSlideBet
+      user {
+        id
+        name
+        preferenceHideBets
+        __typename
+      }
+      __typename
+    }
+    ... on SoftswissBet {
+      ...SoftswissBet
+      user {
+        id
+        name
+        preferenceHideBets
+        __typename
+      }
+      __typename
+    }
+    ... on ThirdPartyBet {
+      ...ThirdPartyBet
+      __typename
+    }
+    ... on SportBet {
+      ...SportBet
+      promotionBet {
+        payout
+        status
+        currency
+        payoutValue
+        promotion {
+          name
+          __typename
+        }
+        __typename
+      }
+      user {
+        id
+        name
+        preferenceHideBets
+        __typename
+      }
+      __typename
+    }
+    ... on SwishBet {
+      ...SwishBetFragment
+      user {
+        id
+        name
+        preferenceHideBets
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment CasinoBet on CasinoBet {
+  id
+  active
+  payoutMultiplier
+  amountMultiplier
+  amount
+  payout
+  updatedAt
+  currency
+  game
+  user {
+    id
+    name
+    __typename
+  }
+}
+
+fragment EvolutionBet on EvolutionBet {
+  id
+  amount
+  currency
+  createdAt
+  payout
+  payoutMultiplier
+  user {
+    id
+    name
+    __typename
+  }
+  softswissGame: game {
+    id
+    name
+    edge
+    __typename
+  }
+}
+
+fragment MultiplayerCrashBet on MultiplayerCrashBet {
+  id
+  user {
+    id
+    name
+    preferenceHideBets
+    __typename
+  }
+  payoutMultiplier
+  gameId
+  amount
+  payout
+  currency
+  result
+  updatedAt
+  cashoutAt
+  btcAmount: amount(currency: btc)
+}
+
+fragment MultiplayerSlideBet on MultiplayerSlideBet {
+  id
+  user {
+    id
+    name
+    preferenceHideBets
+    __typename
+  }
+  payoutMultiplier
+  gameId
+  amount
+  payout
+  currency
+  slideResult: result
+  updatedAt
+  cashoutAt
+  btcAmount: amount(currency: btc)
+  active
+  createdAt
+}
+
+fragment SoftswissBet on SoftswissBet {
+  id
+  amount
+  currency
+  updatedAt
+  payout
+  payoutMultiplier
+  user {
+    id
+    name
+    __typename
+  }
+  softswissGame: game {
+    id
+    name
+    edge
+    extId
+    provider {
+      id
+      name
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment ThirdPartyBet on ThirdPartyBet {
+  id
+  amount
+  currency
+  updatedAt
+  payout
+  payoutMultiplier
+  betReplay
+  user {
+    id
+    name
+    __typename
+  }
+  thirdPartyGame: game {
+    id
+    name
+    edge
+    extId
+    provider {
+      id
+      name
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment SportBet on SportBet {
+  id
+  customBet
+  amount
+  active
+  currency
+  status
+  payoutMultiplier
+  cashoutMultiplier
+  updatedAt
+  payout
+  createdAt
+  potentialMultiplier
+  adjustments {
+    id
+    payoutMultiplier
+    updatedAt
+    createdAt
+    __typename
+  }
+  promotionBet {
+    settleType
+    status
+    payout
+    currency
+    promotion {
+      name
+      __typename
+    }
+    __typename
+  }
+  user {
+    id
+    name
+    __typename
+  }
+  bet {
+    iid
+    __typename
+  }
+  outcomes {
+    __typename
+    odds
+    status
+    outcome {
+      __typename
+      ...SportMarketOutcome
+    }
+    market {
+      ...SportMarket
+      __typename
+    }
+    fixture {
+      id
+      status
+      slug
+      provider
+      marketCount(status: [active, suspended])
+      extId
+      data {
+        ...SportFixtureDataMatch
+        ...SportFixtureDataOutright
+        __typename
+      }
+      tournament {
+        ...TournamentTreeNested
+        __typename
+      }
+      eventStatus {
+        ...SportOutcomeFixtureEventStatus
+        ...EsportOutcomeFixtureEventStatus
+        __typename
+      }
+      ...SportFixtureLiveStreamExists
+      __typename
+    }
+  }
+}
+
+fragment SportMarketOutcome on SportMarketOutcome {
+  active
+  id
+  odds
+  name
+  customBetAvailable
+  __typename
+}
+
+fragment SportMarket on SportMarket {
+  id
+  name
+  status
+  extId
+  specifiers
+  customBetAvailable
+  provider
+}
+
+fragment SportFixtureDataMatch on SportFixtureDataMatch {
+  startTime
+  competitors {
+    ...SportFixtureCompetitor
+    __typename
+  }
+  teams {
+    name
+    qualifier
+    __typename
+  }
+  tvChannels {
+    language
+    name
+    streamUrl
+    __typename
+  }
+  __typename
+}
+
+fragment SportFixtureCompetitor on SportFixtureCompetitor {
+  name
+  extId
+  countryCode
+  abbreviation
+  iconPath
+}
+
+fragment SportFixtureDataOutright on SportFixtureDataOutright {
+  name
+  startTime
+  endTime
+  __typename
+}
+
+fragment TournamentTreeNested on SportTournament {
+  id
+  name
+  slug
+  category {
+    ...CategoryTreeNested
+    __typename
+  }
+}
+
+fragment CategoryTreeNested on SportCategory {
+  id
+  name
+  slug
+  sport {
+    id
+    name
+    slug
+    __typename
+  }
+}
+
+fragment SportOutcomeFixtureEventStatus on SportFixtureEventStatusData {
+  homeScore
+  awayScore
+  matchStatus
+  clock {
+    matchTime
+    remainingTime
+    __typename
+  }
+  periodScores {
+    homeScore
+    awayScore
+    matchStatus
+    __typename
+  }
+  currentTeamServing
+  homeGameScore
+  awayGameScore
+  statistic {
+    yellowCards {
+      away
+      home
+      __typename
+    }
+    redCards {
+      away
+      home
+      __typename
+    }
+    corners {
+      home
+      away
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment EsportOutcomeFixtureEventStatus on EsportFixtureEventStatus {
+  matchStatus
+  homeScore
+  awayScore
+  scoreboard {
+    homeGold
+    awayGold
+    homeGoals
+    awayGoals
+    homeKills
+    awayKills
+    gameTime
+    homeDestroyedTowers
+    awayDestroyedTurrets
+    currentRound
+    currentCtTeam
+    currentDefTeam
+    time
+    awayWonRounds
+    homeWonRounds
+    remainingGameTime
+    __typename
+  }
+  periodScores {
+    type
+    number
+    awayGoals
+    awayKills
+    awayScore
+    homeGoals
+    homeKills
+    homeScore
+    awayWonRounds
+    homeWonRounds
+    matchStatus
+    __typename
+  }
+  __typename
+}
+
+fragment SportFixtureLiveStreamExists on SportFixture {
+  id
+  betradarStream {
+    exists
+    __typename
+  }
+  imgArenaStream {
+    exists
+    __typename
+  }
+  abiosStream {
+    exists
+    stream {
+      startTime
+      id
+      __typename
+    }
+    __typename
+  }
+  geniussportsStream(deliveryType: hls) {
+    exists
+    __typename
+  }
+}
+
+fragment SwishBetFragment on SwishBet {
+  __typename
+  active
+  amount
+  cashoutMultiplier
+  createdAt
+  currency
+  customBet
+  id
+  odds
+  payout
+  payoutMultiplier
+  updatedAt
+  status
+  user {
+    id
+    name
+    preferenceHideBets
+    __typename
+  }
+  outcomes {
+    __typename
+    id
+    odds
+    lineType
+    outcome {
+      ...SwishMarketOutcomeFragment
+      __typename
+    }
+  }
+}
+
+fragment SwishMarketOutcomeFragment on SwishMarketOutcome {
+  __typename
+  id
+  line
+  over
+  under
+  gradeOver
+  gradeUnder
+  suspended
+  balanced
+  name
+  competitor {
+    id
+    name
+    __typename
+  }
+  market {
+    id
+    stat {
+      name
+      value
+      __typename
+    }
+    game {
+      id
+      fixture {
+        id
+        name
+        slug
+        status
+        swishGame {
+          swishSportId
+          __typename
+        }
+        eventStatus {
+          ...SportFixtureEventStatus
+          ...EsportFixtureEventStatus
+          __typename
+        }
+        data {
+          ... on SportFixtureDataMatch {
+            __typename
+            startTime
+            competitors {
+              name
+              extId
+              countryCode
+              abbreviation
+              __typename
+            }
+          }
+          __typename
+        }
+        tournament {
+          id
+          slug
+          name
+          category {
+            id
+            slug
+            name
+            sport {
+              id
+              name
+              slug
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment SportFixtureEventStatus on SportFixtureEventStatusData {
+  __typename
+  homeScore
+  awayScore
+  matchStatus
+  clock {
+    matchTime
+    remainingTime
+    __typename
+  }
+  periodScores {
+    homeScore
+    awayScore
+    matchStatus
+    __typename
+  }
+  currentTeamServing
+  homeGameScore
+  awayGameScore
+  statistic {
+    yellowCards {
+      away
+      home
+      __typename
+    }
+    redCards {
+      away
+      home
+      __typename
+    }
+    corners {
+      home
+      away
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment EsportFixtureEventStatus on EsportFixtureEventStatus {
+  matchStatus
+  homeScore
+  awayScore
+  scoreboard {
+    homeGold
+    awayGold
+    homeGoals
+    awayGoals
+    homeKills
+    awayKills
+    gameTime
+    homeDestroyedTowers
+    awayDestroyedTurrets
+    currentRound
+    currentCtTeam
+    currentDefTeam
+    time
+    awayWonRounds
+    homeWonRounds
+    remainingGameTime
+    __typename
+  }
+  periodScores {
+    type
+    number
+    awayGoals
+    awayKills
+    awayScore
+    homeGoals
+    homeKills
+    homeScore
+    awayWonRounds
+    homeWonRounds
+    matchStatus
+    __typename
+  }
+  __typename
+}

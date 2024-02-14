@@ -1,0 +1,73 @@
+query ChallengeList($limit: Int!, $offset: Int!, $sort: ChallengeSort!, $type: ChallengeFilterType!, $count: ChallengeCountType!) {
+  user {
+    id
+    challengeCount(type: $count)
+    challengeList(limit: $limit, offset: $offset, sort: $sort, type: $type) {
+      ...Challenge
+    }
+  }
+}
+
+fragment Challenge on Challenge {
+  id
+  type
+  active
+  adminCreated
+  completedAt
+  award
+  claimCount
+  claimMax
+  currency
+  isRefunded
+  minBetUsd
+  betCurrency
+  startAt
+  expireAt
+  updatedAt
+  createdAt
+  targetMultiplier
+  game {
+    id
+    name
+    slug
+    thumbnailUrl
+  }
+  creatorUser {
+    ...UserTags
+  }
+  affiliateUser {
+    ...UserTags
+  }
+  wins {
+    id
+    claimedBy {
+      ...UserTags
+    }
+  }
+}
+
+fragment UserTags on User {
+  id
+  name
+  isMuted
+  isRainproof
+  isIgnored
+  isHighroller
+  isSportHighroller
+  leaderboardDailyProfitRank
+  leaderboardDailyWageredRank
+  leaderboardWeeklyProfitRank
+  leaderboardWeeklyWageredRank
+  flags {
+    flag
+    rank
+    createdAt
+  }
+  roles {
+    name
+    expireAt
+    message
+  }
+  createdAt
+  preferenceHideBets
+}

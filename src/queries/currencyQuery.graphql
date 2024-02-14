@@ -1,0 +1,23 @@
+query CurrencyConversionRate {
+  info {
+    currencies {
+      name
+      eur: value(fiatCurrency: eur)
+      jpy: value(fiatCurrency: jpy)
+      usd: value(fiatCurrency: usd)
+      brl: value(fiatCurrency: brl)
+      cad: value(fiatCurrency: cad)
+      cny: value(fiatCurrency: cny)
+      idr: value(fiatCurrency: idr)
+      inr: value(fiatCurrency: inr)
+      krw: value(fiatCurrency: krw)
+      php: value(fiatCurrency: php)
+      rub: value(fiatCurrency: rub)
+      mxn: value(fiatCurrency: mxn)
+      dkk: value(fiatCurrency: dkk)
+      try: value(fiatCurrency: try)
+      pln: value(fiatCurrency: pln)
+      vnd: value(fiatCurrency: vnd)
+    }
+  }
+}
