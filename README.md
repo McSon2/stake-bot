@@ -42,3 +42,5 @@ VAPID_PRIVATE_KEY=(votre clé privée VAPID)
 ## Fichier volumineux
 
 Le fichier de base de données `sports.db` est disponible au téléchargement via Google Drive : [Télécharger sports.db](https://drive.google.com/uc?export=download&id=1ht5oLoH_fVCDftmtaIULk1Qfq4VhxVKz)
+
+il faut placer sports.db dans /src
