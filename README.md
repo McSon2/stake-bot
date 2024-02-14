@@ -39,4 +39,6 @@ VAPID_PUBLIC_KEY=(votre clé publique VAPID)
 VAPID_PRIVATE_KEY=(votre clé privée VAPID)
 ```
 
-Assurez-vous de ne jamais publier votre fichier `.env` ou de divulguer vos clés et tokens sensibles publiquement.
+## Fichier volumineux
+
+Le fichier de base de données `sports.db` est disponible au téléchargement via Google Drive : [Télécharger sports.db](https://drive.google.com/uc?export=download&id=1ht5oLoH_fVCDftmtaIULk1Qfq4VhxVKz)
