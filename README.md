@@ -45,6 +45,6 @@ VAPID_PRIVATE_KEY=(votre clé privée VAPID)
 
 ## Large File
 
-The `sports.db` database file is available for download via Google Drive: [Download sports.db](https://drive.google.com/uc?export=download&id=1ht5oLoH_fVCDftmtaIULk1Qfq4VhxVKz)
+The `sports.db` database file is available for download via Google Drive: [Download sports.db](https://drive.usercontent.google.com/download?id=1Ab_RbDdpDbGiqFbP6VlLx8TbHP3grGaS&export=download&authuser=0)
 
 It should be placed in /src.
