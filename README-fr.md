@@ -4,6 +4,8 @@
 
 ## Configuration
 
+Vous avez besoin de ce projet pour le faire fonctionner : [Stake-bot](https://github.com/McSon2/stake-bot-web)
+
 Pour configurer correctement le bot, vous devez créer un fichier `.env` à la racine de votre projet. Ce fichier doit contenir plusieurs clés de configuration essentielles pour que le bot fonctionne correctement. Voici un guide pour chaque variable que vous devez définir :
 
 ### API_KEY
