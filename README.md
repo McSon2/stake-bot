@@ -1,6 +1,6 @@
 # Stake-Bot
 
-[English](README.md#english) | [Français](README.md#français)
+[English](README.md#english)
 
 ## Configuration
 
